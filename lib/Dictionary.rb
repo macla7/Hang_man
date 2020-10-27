@@ -17,6 +17,6 @@ class Dictionary
   end
 
   def random_worder
-    p @dictionary.sample
+    p @dictionary.sample.downcase
   end
 end
