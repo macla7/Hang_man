@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 require_relative 'drawings'
+require_relative 'Save_Load'
 
 class Game
   include Drawings
+  include SaveLoad
   def initialize(secret_word)
     @secret_word = secret_word
     @hung_limbs = 0
@@ -25,7 +27,11 @@ class Game
       print '      : '
       action = gets.chomp.downcase
       if action == 'load'
-        # code here..
+        if File.exists? 'hangmang_save.yml'
+          load_game
+        else
+          puts 'file doesn\'t exist'
+        end
         @action_approved = true
       elsif action == 'new'
         new_game
@@ -41,19 +47,23 @@ class Game
   end
 
   def turn
-    print "\nType in your letter of choice!\n\n"
+    print "\nType in your letter of choice!\nType 'save' anytime to save the game and come back to it later on!\n\n"
     letter_approved = false
     until letter_approved == true
       print '      : '
       @letter = gets.chomp.downcase
       my_regex = /[a-z]/
       letter_approved = true if @letter.match(my_regex) && @letter.length == 1
+      letter_approved = true if @letter == 'save'
     end
     checker
   end
 
   def checker
-    if @secret_array.include? @letter
+    if @letter == 'save'
+      puts "\n\n Thanks for playing, come back and start where you left off at anytime! *whisphers* coward\n\n"
+      def_game_state
+    elsif @secret_array.include? @letter
       correct_guess
     else
       incorrect_guess
