@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'yaml'
 
 module SaveLoad
@@ -15,14 +17,17 @@ module SaveLoad
   end
 
   def saver(game_state)
-    save_file = File.open('hangmang_save.yml', 'w')
+    save_file = File.open('hangman_save.yml', 'w')
     YAML.dump(game_state, save_file)
     save_file.close
+    puts 'Saved to hangman_save.yml'
     exit
   end
 
   def load_game
     save_file = YAML.load(File.read('hangman_save.yml'))
+
+    puts "\nWelcome back!!"
     @secret_word = save_file[:secret_word]
     @hung_limbs = save_file[:hung_limbs]
     @secret_array = save_file[:secret_array]
@@ -30,6 +35,6 @@ module SaveLoad
     @wrong_letters = save_file[:wrong_letters]
     @action_approved = save_file[:action_approved]
     @letter = save_file[:letter]
-    turn
+    picture
   end
 end

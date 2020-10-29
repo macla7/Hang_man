@@ -14,20 +14,19 @@ class Game
     @wrong_letters = ''
     @action_approved = false
     @letter = ''
-    say_hi
-  end
-
-  def say_hi
-    print "\n\nHowdy! Please type 'new' to start a new game, or 'load' to load your saved copy.\n\n"
+    @begining = true
     start_game
   end
 
   def start_game
     until @action_approved == true
+      system('clear')
+      print "\n\nHowdy! Please type 'new' to start a new game, or 'load' to load your saved copy.\n\n"
       print '      : '
       action = gets.chomp.downcase
+      system('clear')
       if action == 'load'
-        if File.exists? 'hangmang_save.yml'
+        if File.exist? 'hangman_save.yml'
           load_game
         else
           puts 'file doesn\'t exist'
@@ -60,9 +59,13 @@ class Game
   end
 
   def checker
+    system('clear')
     if @letter == 'save'
       puts "\n\n Thanks for playing, come back and start where you left off at anytime! *whisphers* coward\n\n"
       def_game_state
+    elsif (@wrong_letters.include? @letter) || (@built_word.include? @letter)
+      puts "\nYou already guessed #{@letter}!\n\n"
+      turn
     elsif @secret_array.include? @letter
       correct_guess
     else
@@ -71,29 +74,27 @@ class Game
   end
 
   def correct_guess
-    puts "\ncorrect guess\n\n"
-    add_letter
-  end
-
-  def add_letter
     @secret_array.each_with_index do |letter, ind|
       @built_word[ind] = @letter if letter == @letter
     end
-
-    print ' Word : '
-    puts @built_word.join(' ')
     picture
   end
 
   def incorrect_guess
     @hung_limbs += 1
-    puts "\nincorrect guess\n\n"
-    print '  Word: '
-    puts @built_word.join(' ')
+    add_incorrect_letter
+  end
+
+  def add_incorrect_letter
+    @wrong_letters += "#{@letter} "
     picture
   end
 
   def picture
+    print "\n  Word: "
+    puts "#{@built_word.join(' ')}\n\n"
+    print '  Wrong letters: '
+    puts @wrong_letters
     case @hung_limbs
     when 0
       scene_0
@@ -115,7 +116,7 @@ class Game
 
   def finish
     if @hung_limbs == 6
-      puts "You're done! You line has ended!\n\n"
+      puts "You're done! You line has ended!\nThe secret word was #{@secret_word}\n\n"
     elsif @built_word.join == @secret_word
       puts "You won boi!!\n\n"
     else

@@ -1,20 +1,20 @@
 ---
-:secret_word: recite
-:hung_limbs: 1
+:secret_word: bleach
+:hung_limbs: 3
 :secret_array:
-- r
+- b
+- l
 - e
+- a
 - c
-- i
-- t
-- e
+- h
 :built_word:
 - _
-- e
-- _
-- _
 - _
 - e
-:wrong_letters: ''
+- _
+- _
+- _
+:wrong_letters: 'f r g '
 :action_approved: false
 :letter: save
